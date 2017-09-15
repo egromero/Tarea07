@@ -24,6 +24,11 @@ def process_info(data,lista):
             response = 'Bienvenido a PointerBot'
             requests.post(url_bot + '/sendMessage',
                           data={'chat_id': chat_id, 'text': response})
+        if command[0]== '/info':
+            response = 'información aquí'
+            requests.post(url_bot + '/sendMessage',
+                          data={'chat_id': chat_id, 'text': response})
+
 
 
 
