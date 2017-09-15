@@ -5,7 +5,7 @@ lista_user = []
 
 url_bot = 'https://api.telegram.org/bot376888244:AAEVNjpM9r-q_6KS2lPbVxC_9EzHSGuv2rE'
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/telegram', methods=['POST'])
 def telegram():
     if request.method == 'POST':
         data = request.get_json()
