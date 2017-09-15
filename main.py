@@ -11,6 +11,7 @@ def telegram():
     if request.method == 'POST':
         data = request.get_json()
         process_info(data, lista_user)
+        print('DATAAAAAA', data)
     return 'ok'
 
 
@@ -21,8 +22,8 @@ def process_info(data,lista):
     if 'entities' in data['message'].keys():
         command = data['message']['text']
         command = command.split(' ')
-        if command[0]== '/start':
-            response = 'Bienvenido a PointerBot'
+        if command[0]== '/nuevareu':
+            response = 'Debes decirme cuando será esta reunion, para avisarte'
             requests.post(url_bot + '/sendMessage',
                           data={'chat_id': chat_id, 'text': response})
         if command[0]== '/info':
