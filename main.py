@@ -11,6 +11,7 @@ def telegram():
     if request.method == 'POST':
         data = request.get_json()
         process_info(data, lista_user)
+    return 'ok'
 
 
 def process_info(data,lista):
