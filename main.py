@@ -16,7 +16,7 @@ def telegram():
         data = request.get_json()
         if 'reply_to_message' in data['message'].keys() and \
                 data['message']['reply_to_message']['text'] == respuesta1:
-            respuesta.append('**'+data['message']['text']+'**')
+            respuesta.append(data['message']['text']+':'+'\n\n')
             chat_id = data['message']['chat']['id']
             requests.post(url_bot + '/sendMessage',
                           data={'chat_id': chat_id, 'text': 'Para agregar un punto, '
@@ -32,15 +32,20 @@ def process_info(data,respuesta1, respuesta):
         command = data['message']['text']
         command = command.split(' ')
         if command[0]== '/nuevareu':
-            requests.post(url_bot + '/sendMessage',
-                          data={'chat_id': chat_id, 'text': respuesta1})
+            if respuesta:
+                requests.post(url_bot + '/sendMessage',
+                              data={'chat_id': chat_id, 'text': 'Hay un punteo en '
+                                                    'curso, usa /done para terminar'})
+            else:
+                requests.post(url_bot + '/sendMessage',
+                            data={'chat_id': chat_id, 'text': respuesta1})
         if command[0]== '/info':
             response = 'información aquí:\n ' \
                        'bla bla bla'
             requests.post(url_bot + '/sendMessage',
                           data={'chat_id': chat_id, 'text': response})
         if command[0]== '/punto':
-            punto = ' '.join(command[1::])
+            punto = '\n'+' '.join(command[1::])+'\n'
             respuesta.append(punto)
             response = 'Punto agregado {} 👌🏾'.format(data['message']['from']['first_name'])
             requests.post(url_bot + '/sendMessage',
@@ -49,6 +54,17 @@ def process_info(data,respuesta1, respuesta):
             response = ' '.join(respuesta)
             requests.post(url_bot + '/sendMessage',
                           data={'chat_id': chat_id, 'text': response})
+            historial = response
+            respuesta.clear()
+        if command[0] == '/show':
+            if respuesta:
+                requests.post(url_bot + '/sendMessage',
+                              data={'chat_id': chat_id, 'text': 'primero debes terminar el punteo, '
+                                                                'usa /done'})
+            else:
+                requests.post(url_bot + '/sendMessage',
+                              data={'chat_id': chat_id, 'text': historial})
+
 
 
 
