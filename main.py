@@ -2,34 +2,51 @@ from flask import Flask, request
 import requests
 
 app = Flask(__name__)
-lista_user = []
+respuesta = ''
 
-url_bot = 'https://api.telegram.org/bot376888244:AAEVNjpM9r-q_6KS2lPbVxC_9EzHSGuv2rE'
+url_bot = 'https://api.telegram.org/bot376888244:' \
+          'AAEVNjpM9r-q_6KS2lPbVxC_9EzHSGuv2rE'
+
 
 @app.route('/telegram', methods=['POST'])
 def telegram():
+    respuesta1 = 'Debes indicarme cuando será la reunión' \
+                 'y una breve descripción.'
     if request.method == 'POST':
         data = request.get_json()
-        process_info(data, lista_user)
-        print('DATAAAAAA', data)
+        if 'reply_to_message' in data['message'].keys() and \
+                data['message']['reply_to_message']['text'] == respuesta1:
+            process_info(data,respuesta1,respuesta)
+
+        process_info(data,respuesta1)
+
     return 'ok'
 
-
-def process_info(data,lista):
+def process_info(data,respuesta1, respuesta = ''):
     chat_id = data['message']['chat']['id']
-    if not chat_id in lista:
-        lista.append(chat_id)
     if 'entities' in data['message'].keys():
         command = data['message']['text']
         command = command.split(' ')
         if command[0]== '/nuevareu':
-            response = 'Debes decirme cuando será esta reunion, para avisarte'
             requests.post(url_bot + '/sendMessage',
-                          data={'chat_id': chat_id, 'text': response})
+                          data={'chat_id': chat_id, 'text': respuesta1})
         if command[0]== '/info':
-            response = 'información aquí'
+            response = 'información aquí:\n ' \
+                       'bla bla bla'
             requests.post(url_bot + '/sendMessage',
                           data={'chat_id': chat_id, 'text': response})
+        if command[0]== '/punto':
+            punto = ' '.join(command[1::])
+            respuesta+='\n'+punto
+            response = 'Punto agregado {}'.format(data['message']['from']['first_name']+ ' :ok_hand:')
+            requests.post(url_bot + '/sendMessage',
+                          data={'chat_id': chat_id, 'text': response})
+
+
+
+
+
+
 
 
 
