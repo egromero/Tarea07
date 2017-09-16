@@ -54,7 +54,7 @@ def process_info(data,respuesta1, respuesta):
             response = ' '.join(respuesta)
             requests.post(url_bot + '/sendMessage',
                           data={'chat_id': chat_id, 'text': response})
-            historial ='{}'.format(response)
+            historial =str(response)
             respuesta.clear()
         if command[0] == '/show':
             if respuesta:
