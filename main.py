@@ -10,12 +10,16 @@ url_bot = 'https://api.telegram.org/bot376888244:' \
 
 @app.route('/telegram', methods=['POST'])
 def telegram():
-    respuesta1 = 'Debes indicarme cuando será la reunión' \
+    respuesta1 = 'Debes indicarme cuando será la reunión ' \
                  'y una breve descripción.'
     if request.method == 'POST':
         data = request.get_json()
         if 'reply_to_message' in data['message'].keys() and \
                 data['message']['reply_to_message']['text'] == respuesta1:
+            chat_id = data['message']['chat']['id']
+            requests.post(url_bot + '/sendMessage',
+                          data={'chat_id': chat_id, 'text': 'Para agregar un punto, '
+                                                            'debes usar /punto'})
             process_info(data,respuesta1,respuesta)
 
         process_info(data,respuesta1)
@@ -38,10 +42,12 @@ def process_info(data,respuesta1, respuesta = ''):
         if command[0]== '/punto':
             punto = ' '.join(command[1::])
             respuesta+='\n'+punto
-            response = 'Punto agregado {}'.format(data['message']['from']['first_name']+ ' :ok_hand:')
+            response = 'Punto agregado {} 👌🏾'.format(data['message']['from']['first_name'])
             requests.post(url_bot + '/sendMessage',
                           data={'chat_id': chat_id, 'text': response})
-
+        if command[0] == '/done':
+            requests.post(url_bot + '/sendMessage',
+                          data={'chat_id': chat_id, 'text': respuesta})
 
 
 
