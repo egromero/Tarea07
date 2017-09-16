@@ -32,12 +32,8 @@ def process_info(data,respuesta1, respuesta):
         command = data['message']['text']
         command = command.split(' ')
         if command[0]== '/nuevareu':
-            if respuesta:
-                requests.post(url_bot + '/sendMessage',
-                              data={'chat_id': chat_id, 'text': 'Hay un punteo en '
-                                                    'curso, usa /done para terminar'})
-            else:
-                requests.post(url_bot + '/sendMessage',
+            respuesta.clear()
+            requests.post(url_bot + '/sendMessage',
                             data={'chat_id': chat_id, 'text': respuesta1})
         if command[0]== '/info':
             response = 'información aquí:\n ' \
@@ -54,17 +50,7 @@ def process_info(data,respuesta1, respuesta):
             response = ' '.join(respuesta)
             requests.post(url_bot + '/sendMessage',
                           data={'chat_id': chat_id, 'text': response})
-            historial =str(response)
-            respuesta.clear()
-        if command[0] == '/show':
-            if respuesta:
-                requests.post(url_bot + '/sendMessage',
-                              data={'chat_id': chat_id, 'text': 'primero debes terminar el punteo, '
-                                                                'usa /done'})
-            else:
-                requests.post(url_bot + '/sendMessage',
-                              data={'chat_id': chat_id, 'text': historial})
-
+        
 
 
 
