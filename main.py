@@ -46,11 +46,11 @@ def process_info(data,respuesta1, respuesta):
             response = 'Punto agregado {} 👌🏾'.format(data['message']['from']['first_name'])
             requests.post(url_bot + '/sendMessage',
                           data={'chat_id': chat_id, 'text': response})
-        if command[0] == '/done':
+        if command[0] == '/results':
             response = ' '.join(respuesta)
             requests.post(url_bot + '/sendMessage',
                           data={'chat_id': chat_id, 'text': response})
-        
+
 
 
 
